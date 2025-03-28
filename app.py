@@ -68,8 +68,7 @@ async def submit_form(
     niche_interests: str = Form(default="")
 ):
     form_data = await request.form()
-    print("Received form data:", dict(form_data))
-
+    print("Received form data:", dict(form_data))  # This should work now
     user_preferences = [
         emotional_psychological_insights,
         social_support,
