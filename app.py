@@ -1,60 +1,15 @@
-import csv
-import math
-import os
-from fastapi import FastAPI, Form, Request, HTTPException
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
-from typing import List
+def recommend_modules(user_vector, user_preferences, all_modules):
+    euclidean_scores = []
+    for module in all_modules:
+        euclidean_score = euclidean_distance(user_vector, module["features"])
+        euclidean_scores.append((module["name"], euclidean_score, module["features"]))
+    euclidean_scores.sort(key=lambda x: x[1])
+    print("Euclidean scores:", euclidean_scores[:5])  # Debug
 
-app = FastAPI()
-templates = Jinja2Templates(directory="templates")
+    hierarchical_scores = hierarchical_ranking(user_preferences, all_modules)
+    print("Hierarchical scores:", hierarchical_scores)  # Debug
 
-# Define categories and niche topics
-categories = ["Emotional & Psychological Insights", "Social Support", "Nutrition for Recovery", "Becoming Eating Disorder Informed"]
-category_keys = ["emotional_psychological_insights", "social_support", "nutrition_for_recovery", "becoming_eating_disorder_informed"]
-niche_topics = ["Transgender", "Decolonizing Eating Disorders", "Non-Diet Approach to Managing Diabetes & Heart", "Food & Trauma from Sexual Violence", "Neurodivergence", "Type 1 Diabetes", "Athletes"]
-
-# Load modules from CSV
-def load_modules(csv_file_path):
-    all_modules = []
-    try:
-        with open(csv_file_path, newline='') as csvfile:
-            reader = csv.DictReader(csvfile)
-            reader.fieldnames = [name.strip() for name in reader.fieldnames]
-            for row in reader:
-                try:
-                    module = {
-                        "name": row["Title"],
-                        "features": [float(row[category.strip()]) for category in categories]
-                    }
-                    all_modules.append(module)
-                except (ValueError, KeyError) as e:
-                    print(f"Error processing row {row}: {e}")
-    except FileNotFoundError:
-        print(f"CSV file {csv_file_path} not found")
-    return all_modules
-
-# Recommendation functions (unchanged for brevity)
-def euclidean_distance(vector1, vector2):
-    if len(vector1) != len(vector2):
-        return float("inf")
-    squared_distance = 0
-    for i in range(len(vector1)):
-        squared_distance += (vector1[i] - vector2[i]) ** 2
-    return math.sqrt(squared_distance)
-
-def hierarchical_ranking(user_preferences, all_modules): ...
-def recommend_modules(user_vector, user_preferences, all_modules): ...
-
-# Load modules at startup
-csv_path = os.path.join(os.path.dirname(__file__), "modules3.csv")
-all_modules = load_modules(csv_path)
-if not all_modules:
-    print("Warning: No modules loaded from CSV")
-
-@app.get("/", response_class=HTMLResponse)
-async def root():
-    return "Welcome to the app. Use POST /submit for form submissions."
+    return euclidean_scores[:5], hierarchical_scores
 
 @app.post("/submit", response_class=HTMLResponse)
 async def submit_form(
@@ -68,7 +23,8 @@ async def submit_form(
     niche_interests: str = Form(default="")
 ):
     form_data = await request.form()
-    print("Received form data:", dict(form_data))  # This should work now
+    print("Received form data:", dict(form_data))
+
     user_preferences = [
         emotional_psychological_insights,
         social_support,
@@ -82,6 +38,8 @@ async def submit_form(
         raise HTTPException(status_code=500, detail="Modules data not available")
 
     top_5_euclidean, top_5_hierarchical = recommend_modules(user_vector, user_preferences, all_modules)
+    print("Top 5 Euclidean:", top_5_euclidean)  # Debug
+    print("Top 5 Hierarchical:", top_5_hierarchical)  # Debug
 
     return templates.TemplateResponse(
         "thankyou.html",
