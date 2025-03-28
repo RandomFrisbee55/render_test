@@ -1,1 +1,53 @@
-#paceholder
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thank You - Body Brave Recommender</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        ul, ol {
+            margin: 10px 0;
+        }
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Thank You for Your Submission, {{ name }}!</h1>
+    <p>We’ve sent a confirmation to {{ email }}.</p>
+    <h2>Your Preferences:</h2>
+    <ul>
+        {% for category, rating in preferences.items() %}
+        <li>{{ category }}: {{ rating }}</li>
+        {% endfor %}
+    </ul>
+    <h2>Your Niche Interests:</h2>
+    <p>{{ niche_interests if niche_interests else "None" }}</p>
+    <h2>Recommended General Modules (Euclidean Distance):</h2>
+    <ol>
+        {% for name, score, features in euclidean_recommendations %}
+        <li>{{ name }} (Distance: {{ score | round(2) }}, Features: {{ features }})</li>
+        {% endfor %}
+    </ol>
+    <h2>Recommended General Modules (Hierarchical Method):</h2>
+    <ol>
+        {% for name, score, features in hierarchical_recommendations %}
+        <li>{{ name }} (Primary Score: {{ score | round(2) }}, Features: {{ features }})</li>
+        {% endfor %}
+    </ol>
+    {% if niche_interests %}
+    <h2>Niche Topic Recommendations:</h2>
+    <ol>
+        {% for niche in niche_interests %}
+        <li>{{ niche }}</li>
+        {% endfor %}
+    </ol>
+    {% endif %}
+</body>
+</html>
