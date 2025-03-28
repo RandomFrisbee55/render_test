@@ -102,15 +102,18 @@ all_modules = load_modules("modules3.csv")
 
 # Submit endpoint for redirect with HTTP POST
 @app.post("/submit", response_class=HTMLResponse)
-async def submit_form(
-    request: Request,
-    name: str = Form(...),
-    email: str = Form(...),
-    emotional_psychological_insights: float = Form(...),
-    social_support: float = Form(...),
-    nutrition_for_recovery: float = Form(...),
-    becoming_eating_disorder_informed: float = Form(...),
-    niche_interests: List[str] = Form(default=[])
+async def submit_form(request: Request):
+    form_data = await request.form()
+    print("Received form data:", dict(form_data))
+    # Original parameters below
+    name: str = Form(...)
+    email: str = Form(...)
+    emotional_psychological_insights: float = Form(...)
+    social_support: float = Form(...)
+    nutrition_for_recovery: float = Form(...)
+    becoming_eating_disorder_informed: float = Form(...)
+    niche_interests: str = Form(default="")
+    # Rest of your code...
 ):
     user_preferences = [
         emotional_psychological_insights,
