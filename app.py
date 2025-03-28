@@ -108,8 +108,6 @@ async def root():
 @app.post("/submit", response_class=HTMLResponse)
 async def submit_form(
     request: Request,
-    name: str = Form(...),
-    email: str = Form(...),
     emotional_psychological_insights: float = Form(...),
     social_support: float = Form(...),
     nutrition_for_recovery: float = Form(...),
@@ -139,8 +137,8 @@ async def submit_form(
         "thankyou.html",
         {
             "request": request,
-            "name": name,
-            "email": email,
+            "name": "User",
+            "email": "N/A",
             "preferences": dict(zip(categories, user_preferences)),
             "niche_interests": user_niche_interests,
             "euclidean_recommendations": top_5_euclidean,
