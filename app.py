@@ -1,15 +1,15 @@
 import csv
 import math
 import os
-import httpx  # NEW: Required for forwarding requests
 from fastapi import FastAPI, Form, Request, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles  # Add this import
 from typing import List
 
 # Define the FastAPI app
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")  # Add this line
+app.mount("/static", StaticFiles(directory="static"), name="static")  # Serve static files
 templates = Jinja2Templates(directory="templates")
 
 # Define categories and niche topics
@@ -104,30 +104,6 @@ if not all_modules:
 async def root():
     return "Welcome to the app. Use POST /submit for form submissions."
 
-# NEW: Webhook endpoint (middleware) to filter Jotform data
-@app.post("/webhook", response_class=HTMLResponse)
-async def webhook_handler(request: Request):
-    form_data = await request.form()
-    print("Webhook received full data")  # Avoid logging PHI
-
-    # Filter to only send preferences to /submit
-    filtered_data = {
-        "emotional_psychological_insights": float(form_data.get("emotional_psychological_insights", 0)),
-        "social_support": float(form_data.get("social_support", 0)),
-        "nutrition_for_recovery": float(form_data.get("nutrition_for_recovery", 0)),
-        "becoming_eating_disorder_informed": float(form_data.get("becoming_eating_disorder_informed", 0)),
-        "niche_interests": form_data.get("niche_interests[0]", "")  # Adjust based on Jotform naming
-    }
-
-    # Forward filtered data to /submit
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            "https://your-app-name.onrender.com/submit",  # Replace with your Render URL
-            data=filtered_data
-        )
-    return response.text
-
-# UPDATED: /submit endpoint only expects preferences
 @app.post("/submit", response_class=HTMLResponse)
 async def submit_form(
     request: Request,
@@ -157,8 +133,8 @@ async def submit_form(
         "thankyou.html",
         {
             "request": request,
-            "name": "User",  # Placeholder since name isn’t sent
-            "email": "N/A",  # Placeholder since email isn’t sent
+            "name": "User",  # Placeholder
+            "email": "N/A",  # Placeholder
             "preferences": dict(zip(categories, user_preferences)),
             "niche_interests": user_niche_interests,
             "euclidean_recommendations": top_5_euclidean,
