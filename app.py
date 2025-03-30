@@ -9,6 +9,7 @@ from typing import List
 
 # Define the FastAPI app
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")  # Add this line
 templates = Jinja2Templates(directory="templates")
 
 # Define categories and niche topics
