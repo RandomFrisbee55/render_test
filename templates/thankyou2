@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thank You - Body Brave Recommender</title>
+    <style>
+        body {
+            font-family: 'Helvetica', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5; /* Light gray background for contrast */
+            color: #4A6B65; /* Medium Teal for body text */
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        header img {
+            max-width: 200px; /* Adjust based on your logo size */
+            height: auto;
+        }
+        h1 {
+            color: #1A3C34; /* Dark Teal for main heading */
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #1A3C34; /* Dark Teal for subheadings */
+            font-size: 1.5em;
+            margin-top: 20px;
+            border-bottom: 2px solid #A3B7B2; /* Light Teal for underline */
+            padding-bottom: 5px;
+        }
+        ul, ol {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        li {
+            margin: 8px 0;
+            padding: 5px;
+            background-color: #A3B7B2; /* Light Teal for list item background */
+            border-radius: 5px;
+            color: #1A3C34; /* Dark Teal for list text */
+        }
+        p {
+            margin: 10px 0;
+            font-style: italic;
+            color: #4A6B65; /* Medium Teal for paragraph text */
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .highlight {
+            color: #4A6B65; /* Medium Teal for highlighted ratings */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="/static/body_brave_logo.png" alt="Body Brave Logo">
+            <h1>Thank You for Your Submission!</h1>
+        </header>
+
+        <div class="section">
+            <h2>Recommended General Modules (Euclidean Distance)</h2>
+            <ol>
+                {% for name, score, features in euclidean_recommendations %}
+                <li>{{ name }} (Distance: {{ score | round(2) }}, Features: {{ features }})</li>
+                {% endfor %}
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>Recommended General Modules (Hierarchical Method)</h2>
+            <ol>
+                {% for name, score, features in hierarchical_recommendations %}
+                <li>{{ name }} (Primary Score: {{ score | round(2) }}, Features: {{ features }})</li>
+                {% endfor %}
+            </ol>
+        </div>
+
+        {% if niche_interests %}
+        <div class="section">
+            <h2>Niche Topic Recommendations</h2>
+            <ol>
+                {% for niche in niche_interests %}
+                <li>{{ niche }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
