@@ -104,22 +104,8 @@
         <header>
             <img src="/static/body_brave_logo.png" alt="Body Brave Logo">
             <h1>Thank You for Your Submission!</h1>
-            <p>We’ve sent a confirmation to the email you provided.</p>
+            <p>Here are the recovery support sessions or workships that we recommend based on your stated interests and recovery goals!</p>
         </header>
-
-        <div class="section">
-            <h2>Your Preferences</h2>
-            <ul>
-                {% for category, rating in preferences.items() %}
-                <li>{{ category }}: <span class="highlight">{{ rating }}</span></li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>Your Niche Interests</h2>
-            <p>{{ niche_interests if niche_interests else "None selected" }}</p>
-        </div>
 
         <div class="section">
             <h2>Recommended General Modules (Euclidean Distance)</h2>
@@ -127,9 +113,6 @@
                 {% for name, score, features, link in euclidean_recommendations %}
                 <li class="module-card">
                     <div class="module-title">{{ name }}</div>
-                    <div class="module-details">
-                        Distance: {{ score | round(2) }} | Features: {{ features }}
-                    </div>
                     <div class="module-links">
                         {% if link %}
                         <a href="{{ link }}" target="_blank" class="view-btn">View Module</a>
@@ -146,9 +129,6 @@
                 {% for name, score, features, link in hierarchical_recommendations %}
                 <li class="module-card">
                     <div class="module-title">{{ name }}</div>
-                    <div class="module-details">
-                        Primary Score: {{ score | round(2) }} | Features: {{ features }}
-                    </div>
                     <div class="module-links">
                         {% if link %}
                         <a href="{{ link }}" target="_blank" class="view-btn">View Module</a>
