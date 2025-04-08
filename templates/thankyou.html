@@ -58,19 +58,20 @@
             flex-direction: column;
             gap: 10px;
         }
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap; /* Allows wrapping on smaller screens */
+        }
         .module-title {
             font-weight: bold;
             font-size: 1.1em;
-            margin-bottom: 5px;
+            margin: 0; /* Remove default margin for better alignment */
         }
         .module-details {
             font-size: 0.9em;
             color: #1A3C34;
-        }
-        .module-links {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
         }
         a {
             color: #fff;
@@ -104,7 +105,7 @@
         <header>
             <img src="/static/body_brave_logo.png" alt="Body Brave Logo">
             <h1>Thank You for Your Submission!</h1>
-            <p>Here are the recovery support sessions or workships that we recommend based on your stated interests and recovery goals!</p>
+            <p>Here are the recovery support sessions or workshops that we recommend based on your stated interests and recovery goals!</p>
         </header>
 
         <div class="section">
@@ -112,8 +113,8 @@
             <ol>
                 {% for name, score, features, link in euclidean_recommendations %}
                 <li class="module-card">
-                    <div class="module-title">{{ name }}</div>
-                    <div class="module-links">
+                    <div class="module-header">
+                        <div class="module-title">{{ name }}</div>
                         {% if link %}
                         <a href="{{ link }}" target="_blank" class="view-btn">View Module</a>
                         {% endif %}
@@ -128,8 +129,8 @@
             <ol>
                 {% for name, score, features, link in hierarchical_recommendations %}
                 <li class="module-card">
-                    <div class="module-title">{{ name }}</div>
-                    <div class="module-links">
+                    <div class="module-header">
+                        <div class="module-title">{{ name }}</div>
                         {% if link %}
                         <a href="{{ link }}" target="_blank" class="view-btn">View Module</a>
                         {% endif %}
@@ -145,8 +146,8 @@
             <ol>
                 {% for module in niche_recommendations %}
                 <li class="module-card">
-                    <div class="module-title">{{ module.name }}</div>
-                    <div class="module-links">
+                    <div class="module-header">
+                        <div class="module-title">{{ module.name }}</div>
                         {% if module.link %}
                         <a href="{{ module.link }}" target="_blank" class="view-btn">View Module</a>
                         {% endif %}
