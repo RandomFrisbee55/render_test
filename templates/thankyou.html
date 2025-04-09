@@ -131,4 +131,59 @@
             <ol>
                 {% for name, score, features, link, description in euclidean_recommendations %}
                 <li class="module-card">
-                    <div class="module-header
+                    <div class="module-header">
+                        <div class="module-title">{{ name }}</div>
+                        {% if link %}
+                        <a href="{{ link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ name }} module in a new tab">View Module</a>
+                        {% endif %}
+                    </div>
+                    {% if description %}
+                    <div class="module-description">{{ description }}</div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>Recommended General Modules (Hierarchical Method)</h2>
+            <ol>
+                {% for name, score, features, link, description in hierarchical_recommendations %}
+                <li class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">{{ name }}</div>
+                        {% if link %}
+                        <a href="{{ link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ name }} module in a new tab">View Module</a>
+                        {% endif %}
+                    </div>
+                    {% if description %}
+                    <div class="module-description">{{ description }}</div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+
+        {% if niche_recommendations %}
+        <div class="section">
+            <h2>Niche Topic Recommendations</h2>
+            <ol>
+                {% for module in niche_recommendations %}
+                <li class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">{{ module.name }}</div>
+                        {% if module.link %}
+                        <a href="{{ module.link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ module.name }} module in a new tab">View Module</a>
+                        {% endif %}
+                    </div>
+                    {% if module.description %}
+                    <div class="module-description">{{ module.description }}</div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
