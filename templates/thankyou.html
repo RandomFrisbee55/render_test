@@ -12,17 +12,6 @@
             background-color: #FFFFFF;
             color: #4A6B65;
             line-height: 1.6;
-            display: flex;
-            min-height: 100vh;
-        }
-        .side-panel {
-            width: 250px;
-            background-color: #B5D5D2; /* Updated to the light teal color from the image */
-            flex-shrink: 0;
-        }
-        .main-content {
-            flex-grow: 1;
-            padding: 0 20px;
         }
         .container {
             max-width: 1200px;
@@ -130,74 +119,71 @@
     </style>
 </head>
 <body>
-    <div class="side-panel"></div>
-    <div class="main-content">
-        <div class="container">
-            <header>
-                <img src="/static/body_brave_logo.png" alt="Body Brave Logo">
-                <h1>Thank You for Your Submission!</h1>
-                <p>Here are the recovery support sessions or workshops that we recommend based on your stated interests and recovery goals!</p>
-            </header>
+    <div class="container">
+        <header>
+            <img src="/static/body_brave_logo.png" alt="Body Brave Logo">
+            <h1>Thank You for Your Submission!</h1>
+            <p>Here are the recovery support sessions or workshops that we recommend based on your stated interests and recovery goals!</p>
+        </header>
 
-            <div class="section">
-                <h2>Recommended General Modules (Euclidean Distance)</h2>
-                <ol>
-                    {% for name, score, features, link, description in euclidean_recommendations %}
-                    <li class="module-card">
-                        <div class="module-header">
-                            <div class="module-title">{{ name }}</div>
-                            {% if link %}
-                            <a href="{{ link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ name }} module in a new tab">View Module</a>
-                            {% endif %}
-                        </div>
-                        {% if description %}
-                        <div class="module-description">{{ description }}</div>
+        <div class="section">
+            <h2>Recommended General Modules (Euclidean Distance)</h2>
+            <ol>
+                {% for name, score, features, link, description in euclidean_recommendations %}
+                <li class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">{{ name }}</div>
+                        {% if link %}
+                        <a href="{{ link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ name }} module in a new tab">View Module</a>
                         {% endif %}
-                    </li>
-                    {% endfor %}
-                </ol>
-            </div>
-
-            <div class="section">
-                <h2>Recommended General Modules (Hierarchical Method)</h2>
-                <ol>
-                    {% for name, score, features, link, description in hierarchical_recommendations %}
-                    <li class="module-card">
-                        <div class="module-header">
-                            <div class="module-title">{{ name }}</div>
-                            {% if link %}
-                            <a href="{{ link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ name }} module in a new tab">View Module</a>
-                            {% endif %}
-                        </div>
-                        {% if description %}
-                        <div class="module-description">{{ description }}</div>
-                        {% endif %}
-                    </li>
-                    {% endfor %}
-                </ol>
-            </div>
-
-            {% if niche_recommendations %}
-            <div class="section">
-                <h2>Niche Topic Recommendations</h2>
-                <ol>
-                    {% for module in niche_recommendations %}
-                    <li class="module-card">
-                        <div class="module-header">
-                            <div class="module-title">{{ module.name }}</div>
-                            {% if module.link %}
-                            <a href="{{ module.link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ module.name }} module in a new tab">View Module</a>
-                            {% endif %}
-                        </div>
-                        {% if module.description %}
-                        <div class="module-description">{{ module.description }}</div>
-                        {% endif %}
-                    </li>
-                    {% endfor %}
-                </ol>
-            </div>
-            {% endif %}
+                    </div>
+                    {% if description %}
+                    <div class="module-description">{{ description }}</div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
         </div>
+
+        <div class="section">
+            <h2>Recommended General Modules (Hierarchical Method)</h2>
+            <ol>
+                {% for name, score, features, link, description in hierarchical_recommendations %}
+                <li class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">{{ name }}</div>
+                        {% if link %}
+                        <a href="{{ link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ name }} module in a new tab">View Module</a>
+                        {% endif %}
+                    </div>
+                    {% if description %}
+                    <div class="module-description">{{ description }}</div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+
+        {% if niche_recommendations %}
+        <div class="section">
+            <h2>Niche Topic Recommendations</h2>
+            <ol>
+                {% for module in niche_recommendations %}
+                <li class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">{{ module.name }}</div>
+                        {% if module.link %}
+                        <a href="{{ module.link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ module.name }} module in a new tab">View Module</a>
+                        {% endif %}
+                    </div>
+                    {% if module.description %}
+                    <div class="module-description">{{ module.description }}</div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+        {% endif %}
     </div>
 </body>
 </html>
