@@ -1,7 +1,7 @@
 import csv
 import math
-import numpy as np
 import os
+import numpy as np
 from fastapi import FastAPI, Form, Request, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -35,32 +35,26 @@ special_topic_modules = {
     "Athletes": "Athletes and Eating Disorders"
 }
 
+# Load modules from CSV
 def load_modules(csv_file_path):
     all_modules = []
     try:
-        with open(csv_file_path, newline='', encoding='utf-8') as csvfile:
+        with open(csv_file_path, newline='') as csvfile:
             reader = csv.DictReader(csvfile)
-            # Only require "Title" and category columns
-            required_columns = ["Title"] + categories
-            if not all(col in reader.fieldnames for col in required_columns):
-                missing = [col for col in required_columns if col not in reader.fieldnames]
-                raise ValueError(f"CSV missing required columns: {missing}")
-            reader.fieldnames = [name.strip() for name in reader.fieldnames]
+            reader.fieldnames = [name.strip() for name in reader.fieldnames]  # Strip whitespace from field names
             for row in reader:
                 try:
                     module = {
-                        "name": row["Title"].strip(),
-                        "features": np.array([float(row[category.strip()]) for category in categories]),
-                        "link": row.get("Link", "").strip(),
-                        "description": row.get("Description", "").strip(),
+                        "name": row["Title"],
+                        "features": [float(row[category.strip()]) for category in categories],
+                        "link": row.get("Link", ""),
+                        "description": row.get("Description", "")  # Load the description
                     }
                     all_modules.append(module)
                 except (ValueError, KeyError) as e:
                     print(f"Error processing row {row}: {e}")
     except FileNotFoundError:
         print(f"CSV file {csv_file_path} not found")
-    except ValueError as e:
-        print(f"CSV validation error: {e}")
     return all_modules
 
 # Recommendation functions
@@ -71,6 +65,13 @@ def euclidean_distance(vector1, vector2):
     for i in range(len(vector1)):
         squared_distance += (vector1[i] - vector2[i]) ** 2
     return math.sqrt(squared_distance)
+
+def weighted_euclidean_distance(user_vector, module_vector, weights):
+    if len(user_vector) != len(module_vector) or len(user_vector) != len(weights):
+        return float("inf")
+    differences = np.array(user_vector) - np.array(module_vector)
+    weighted_squared = (differences ** 2) * np.array(weights)
+    return np.sqrt(np.sum(weighted_squared))
 
 def hierarchical_ranking(user_preferences, all_modules):
     if not all_modules:
@@ -108,13 +109,24 @@ def hierarchical_ranking(user_preferences, all_modules):
     return [(m["name"], m["primary_score"], m["features"], m["link"], m["description"]) for m in module_scores[:5]]
 
 def recommend_modules(user_vector, user_preferences, all_modules):
+    #euclidean
     euclidean_scores = []
     for module in all_modules:
         euclidean_score = euclidean_distance(user_vector, module["features"])
         euclidean_scores.append((module["name"], euclidean_score, module["features"], module["link"], module["description"]))
     euclidean_scores.sort(key=lambda x: x[1])
+
+    # Weighted Euclidean distance
+    weights = [0.5 if pref <= 1 else 1.0 if pref <= 3 else 2.0 for pref in user_preferences]
+    weighted_euclidean_scores = []
+    for module in all_modules:
+        weighted_score = weighted_euclidean_distance(user_vector, module["features"], weights)
+        weighted_euclidean_scores.append((module["name"], weighted_score, module["features"].tolist(), module["link"], module["description"]))
+    weighted_euclidean_scores.sort(key=lambda x: x[1])
+
+    #hierarchical
     hierarchical_scores = hierarchical_ranking(user_preferences, all_modules)
-    return euclidean_scores[:5], hierarchical_scores
+    return euclidean_scores[:5], weighted_euclidean_scores[:5], hierarchical_scores
 
 # Load modules at startup
 csv_path = os.path.join(os.path.dirname(__file__), "modules3.csv")
