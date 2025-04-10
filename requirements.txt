@@ -1,6 +1,8 @@
-fastapi==0.95.1
-uvicorn==0.21.1
-jinja2==3.1.2
-gunicorn==20.1.0
-python-multipart==0.0.9
-httpx==0.27.0  # Latest version as of now
+fastapi==0.111.0  # Latest version as of April 2025
+uvicorn==0.29.0   # Latest version
+jinja2==3.1.4     # Latest version
+gunicorn==22.0.0  # Latest version
+python-multipart==0.0.9  # Already at the latest version
+httpx==0.27.0     # Already at the latest version
+numpy==1.26.4     # Compatible with Python 3.11
+pandas==2.2.2     # Compatible with Python 3.11
