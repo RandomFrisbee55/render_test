@@ -66,13 +66,6 @@ def euclidean_distance(vector1, vector2):
         squared_distance += (vector1[i] - vector2[i]) ** 2
     return math.sqrt(squared_distance)
 
-def weighted_euclidean_distance(user_vector, module_vector, weights):
-    if len(user_vector) != len(module_vector) or len(user_vector) != len(weights):
-        return float("inf")
-    differences = np.array(user_vector) - np.array(module_vector)
-    weighted_squared = (differences ** 2) * np.array(weights)
-    return np.sqrt(np.sum(weighted_squared))
-
 def hierarchical_ranking(user_preferences, all_modules):
     if not all_modules:
         return []
@@ -115,14 +108,6 @@ def recommend_modules(user_vector, user_preferences, all_modules):
         euclidean_score = euclidean_distance(user_vector, module["features"])
         euclidean_scores.append((module["name"], euclidean_score, module["features"], module["link"], module["description"]))
     euclidean_scores.sort(key=lambda x: x[1])
-
-    # Weighted Euclidean distance
-    weights = [0.5 if pref <= 1 else 1.0 if pref <= 3 else 2.0 for pref in user_preferences]
-    weighted_euclidean_scores = []
-    for module in all_modules:
-        weighted_score = weighted_euclidean_distance(user_vector, module["features"], weights)
-        weighted_euclidean_scores.append((module["name"], weighted_score, module["features"].tolist(), module["link"], module["description"]))
-    weighted_euclidean_scores.sort(key=lambda x: x[1])
 
     #hierarchical
     hierarchical_scores = hierarchical_ranking(user_preferences, all_modules)
