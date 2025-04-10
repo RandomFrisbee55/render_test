@@ -1,5 +1,6 @@
 import csv
 import math
+import numpy as np
 import os
 from fastapi import FastAPI, Form, Request, HTTPException
 from fastapi.responses import HTMLResponse
