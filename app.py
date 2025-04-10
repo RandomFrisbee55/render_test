@@ -53,7 +53,6 @@ def load_modules(csv_file_path):
                         "features": np.array([float(row[category.strip()]) for category in categories]),
                         "link": row.get("Link", "").strip(),
                         "description": row.get("Description", "").strip(),
-                        "average_views_per_year": float(row.get("Average Views Per Year", 0))  # Add popularity metric
                     }
                     all_modules.append(module)
                 except (ValueError, KeyError) as e:
