@@ -34,26 +34,33 @@ special_topic_modules = {
     "Athletes": "Athletes and Eating Disorders"
 }
 
-# Load modules from CSV
 def load_modules(csv_file_path):
     all_modules = []
     try:
-        with open(csv_file_path, newline='') as csvfile:
+        with open(csv_file_path, newline='', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
-            reader.fieldnames = [name.strip() for name in reader.fieldnames]  # Strip whitespace from field names
+            # Only require "Title" and category columns
+            required_columns = ["Title"] + categories
+            if not all(col in reader.fieldnames for col in required_columns):
+                missing = [col for col in required_columns if col not in reader.fieldnames]
+                raise ValueError(f"CSV missing required columns: {missing}")
+            reader.fieldnames = [name.strip() for name in reader.fieldnames]
             for row in reader:
                 try:
                     module = {
-                        "name": row["Title"],
-                        "features": [float(row[category.strip()]) for category in categories],
-                        "link": row.get("Link", ""),
-                        "description": row.get("Description", "")  # Load the description
+                        "name": row["Title"].strip(),
+                        "features": np.array([float(row[category.strip()]) for category in categories]),
+                        "link": row.get("Link", "").strip(),
+                        "description": row.get("Description", "").strip(),
+                        "average_views_per_year": float(row.get("Average Views Per Year", 0))  # Add popularity metric
                     }
                     all_modules.append(module)
                 except (ValueError, KeyError) as e:
                     print(f"Error processing row {row}: {e}")
     except FileNotFoundError:
         print(f"CSV file {csv_file_path} not found")
+    except ValueError as e:
+        print(f"CSV validation error: {e}")
     return all_modules
 
 # Recommendation functions
