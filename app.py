@@ -111,7 +111,7 @@ def recommend_modules(user_vector, user_preferences, all_modules):
 
     #hierarchical
     hierarchical_scores = hierarchical_ranking(user_preferences, all_modules)
-    return euclidean_scores[:5], weighted_euclidean_scores[:5], hierarchical_scores
+    return euclidean_scores[:5], hierarchical_scores
 
 # Load modules at startup
 csv_path = os.path.join(os.path.dirname(__file__), "modules3.csv")
