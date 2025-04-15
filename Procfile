@@ -1,1 +1,1 @@
-web: gunicorn -k uvicorn.workers.UvicornWorker test_jotform:app
+web: gunicorn -k uvicorn.workers.UvicornWorker app:app
