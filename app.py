@@ -173,8 +173,8 @@ async def submit_form(request: Request):
 
     # Extract preference fields with their new names
     emotional_psychological_insights = float(form_data.get("emotional_psychological_insights[0]", 1.0))
-    social_support = float(form_data.get("social_support", 1.0))
-    nutrition_for_recovery = float(form_data.get("nutrition_for_recovery", 1.0))
+    social_support = float(form_data.get("social_support[0]", 1.0))
+    nutrition_for_recovery = float(form_data.get("nutrition_for_recovery[0]", 1.0))
     becoming_eating_disorder_informed = float(form_data.get("becoming_eating_disorder_informed[0]", 1.0))
 
     # Extract niche interests (multiple values: niche_interests[0], niche_interests[1], etc.)
