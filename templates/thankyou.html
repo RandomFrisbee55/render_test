@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thank You - Body Brave Recommender</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff; /* Changed to light teal */
+            color: #4A6B65;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 40px;
+            background-color: #FFFFFF; /* Remains white */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        header img {
+            max-width: 250px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: #124a59;
+            font-size: 3em;
+            margin: 0 0 15px 0;
+        }
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: #124a59;
+            font-size: 1.75em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #A3B7B2;
+        }
+        ul, ol {
+            padding-left: 0;
+            margin: 0;
+            list-style: none;
+        }
+        li {
+            margin: 20px 0;
+            padding: 30px;
+            background-color: #FFFFFF; /* Remains white */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .module-card {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .module-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.25em;
+            color: #124a59;
+            margin: 0;
+        }
+        .module-description {
+            font-family: 'Open Sans', Arial, sans-serif;
+            font-size: 0.95em;
+            color: #4A6B65;
+            margin: 0;
+            line-height: 1.5;
+        }
+        a {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: #FFFFFF;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            background-color: #124a59;
+            transition: background-color 0.3s ease;
+        }
+        a:hover {
+            background-color: #2A5C54;
+        }
+        p {
+            margin: 10px 0;
+            font-style: normal;
+            color: #4A6B65;
+            font-size: 1em;
+        }
+        .section {
+            margin-bottom: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="/static/body_brave_logo.png" alt="Body Brave Logo">
+            <h1>Thank You for Your Submission!</h1>
+            <p>Here are the recovery support sessions or workshops that we recommend based on your stated interests and recovery goals! (ADD IN BRIEF DESCRIPTION OF ALGORITHM) </p>
+        </header>
+
+        <div class="section">
+            <h2>Recommended General Modules (Euclidean Distance)</h2>
+            <ol>
+                {% for name, score, features, link, description in euclidean_recommendations %}
+                <li class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">{{ name }}</div>
+                        {% if link %}
+                        <a href="{{ link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ name }} module in a new tab">View Module</a>
+                        {% endif %}
+                    </div>
+                    {% if description %}
+                    <div class="module-description">{{ description }}</div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>Recommended General Modules (Hierarchical Method)</h2>
+            <ol>
+                {% for name, score, features, link, description in hierarchical_recommendations %}
+                <li class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">{{ name }}</div>
+                        {% if link %}
+                        <a href="{{ link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ name }} module in a new tab">View Module</a>
+                        {% endif %}
+                    </div>
+                    {% if description %}
+                    <div class="module-description">{{ description }}</div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+
+        {% if niche_recommendations %}
+        <div class="section">
+            <h2>Niche Topic Recommendations</h2>
+            <ol>
+                {% for module in niche_recommendations %}
+                <li class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">{{ module.name }}</div>
+                        {% if module.link %}
+                        <a href="{{ module.link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ module.name }} module in a new tab">View Module</a>
+                        {% endif %}
+                    </div>
+                    {% if module.description %}
+                    <div class="module-description">{{ module.description }}</div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
