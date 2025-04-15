@@ -20,17 +20,6 @@ async def capture_submit(request: Request):
     data_str = "<h2>Received /submit Data:</h2><pre>" + json.dumps(last_form_data, indent=2) + "</pre>"
     return HTMLResponse(content=data_str)
 
-@app.post("/webhook", response_class=HTMLResponse)
-async def capture_webhook(request: Request):
-    global last_form_data
-    form_data = await request.form()
-    last_form_data = dict(form_data)
-    print("Captured /webhook data:", last_form_data)
-    
-    # Format the data as a string for display
-    data_str = "<h2>Received /webhook Data:</h2><pre>" + json.dumps(last_form_data, indent=2) + "</pre>"
-    return HTMLResponse(content=data_str)
-
 @app.get("/", response_class=HTMLResponse)
 async def view_data(request: Request):
     # Display the most recent form data
