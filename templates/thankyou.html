@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thank You - Body Brave Recommender</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ecf0f1;
+            color: #4A6B65;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        header img {
+            max-width: 120px;
+            height: auto;
+        }
+        .header-text h1 {
+            font-size: 1.2em;
+            color: #4A6B65;
+            margin: 0;
+        }
+        .header-text h2 {
+            font-size: 1.5em;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: #000000;
+            margin: 10px 0 0 0;
+        }
+
+        h2.section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: #000000;
+            font-size: 1.75em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        h2.section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #A3B7B2;
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .module-card {
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .module-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .module-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.2em;
+            color: #124a59;
+            margin: 0;
+        }
+        .module-description {
+            font-size: 0.95em;
+            color: #4A6B65;
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+        a {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: #FFFFFF;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            background-color: #124a59;
+            transition: background-color 0.3s ease;
+        }
+        a:hover {
+            background-color: #2A5C54;
+        }
+        .section {
+            margin-bottom: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="/static/body_brave_logo.png" alt="Body Brave Logo">
+            <div class="header-text">
+                <h1>Thank you for your submission!</h1>
+                <h2>Here are the top 6 recommended recovery support sessions based on your recovery interests and goals.</h2>
+            </div>
+        </header>
+
+        <div class="section">
+            <h2 class="section-title">General Recommendations</h2>
+            <div class="module-grid">
+                {% for name, score, features, link, description in euclidean_recommendations %}
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">{{ name }}</div>
+                        {% if link %}
+                        <a href="{{ link }}" target="_blank" rel="noopener noreferrer">View Module</a>
+                        {% endif %}
+                    </div>
+                    {% if description %}
+                    <div class="module-description">{{ description }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if niche_recommendations %}
+        <div class="section">
+            <h2 class="section-title">Special Interest Sessions</h2>
+            <div class="module-grid">
+                {% for module in niche_recommendations %}
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-title">{{ module.name }}</div>
+                        {% if module.link %}
+                        <a href="{{ module.link }}" target="_blank" rel="noopener noreferrer">View Module</a>
+                        {% endif %}
+                    </div>
+                    {% if module.description %}
+                    <div class="module-description">{{ module.description }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
