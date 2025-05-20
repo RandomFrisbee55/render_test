@@ -7,9 +7,10 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+import jinja2
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)  # Less verbose for production
 logger = logging.getLogger(__name__)
 
 # Define the FastAPI app
@@ -211,54 +212,98 @@ if not special_modules:
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    try:
+        return templates.TemplateResponse("index.html", {"request": request})
+    except jinja2.exceptions.TemplateNotFound:
+        logger.error("index.html not found in templates directory")
+        return HTMLResponse(content="<h1>Error: Home page template not found</h1>", status_code=500)
+
+@app.post("/webhook", response_class=JSONResponse)
+async def webhook(request: Request):
+    form_data = await request.form()
+    logger.debug(f"Webhook received: {dict(form_data)}")
+    return JSONResponse(content={"status": "received"}, status_code=200)
 
 @app.post("/submit", response_class=HTMLResponse)
 async def submit_form(request: Request):
     form_data = await request.form()
     logger.debug(f"Raw form data: {dict(form_data)}")
+    logger.info(f"Form data keys: {list(form_data.keys())}")
 
     try:
+        # Use confirmed JotForm field names from old code
+        field_mapping = {
+            "emotional_psychological_insights[0]": "emotional_psychological_insights",
+            "social_support[0]": "social_support",
+            "nutrition_for_recovery[0]": "nutrition_for_recovery",
+            "becoming_eating_disorder_informed[0]": "becoming_eating_disorder_informed"
+        }
         user_preferences = [
-            float(form_data.get(f"{key}[0]", 1.0))
-            for key in ["emotional_psychological_insights", "social_support", "nutrition_for_recovery", "becoming_eating_disorder_informed"]
+            float(form_data.get(key, 1.0)) for key in field_mapping
         ]
         if not all(1 <= p <= 5 for p in user_preferences):
             raise ValueError("Preferences must be between 1 and 5")
     except (ValueError, TypeError) as e:
-        raise HTTPException(status_code=400, detail=f"Invalid preferences: {str(e)}")
+        logger.error(f"Invalid preferences: {str(e)}")
+        return templates.TemplateResponse(
+            "error.html",
+            {"request": request, "error": f"Invalid preferences: {str(e)}"},
+            status_code=400
+        )
 
     over_18_str = form_data.get("under_18", "NO")
     over_18 = over_18_str.upper() == "YES"
 
     niche_interests = []
     for key, value in form_data.items():
-        if key.startswith("niche_interests"):
-            if isinstance(value, str):
-                niche_interests.extend([v.strip() for v in value.split(",") if v.strip()])
-            elif isinstance(value, list):
-                niche_interests.extend([v.strip() for v in value if v.strip()])
+        if key.startswith("niche_interests["):
+            niche_interests.extend([interest.strip() for interest in value.split(",") if interest.strip()])
 
     if not all_modules:
-        raise HTTPException(status_code=500, detail="Modules data not available")
+        logger.error("Modules data not available")
+        return templates.TemplateResponse(
+            "error.html",
+            {"request": request, "error": "No modules available. Please try again later."},
+            status_code=500
+        )
 
+    # Format recommendations to match old thankyou.html tuple structure
     top_6_modules = [
-        next(m for m in all_modules if m["name"] == name) | {"score": score}
-        for name, score, views in recommend_modules(user_preferences, all_modules, over_18)
+        (
+            module["name"],
+            score,
+            module["features"].tolist(),  # Convert numpy array to list for template
+            module["link"],
+            module["description"]
+        )
+        for module, score, views in [
+            (next(m for m in all_modules if m["name"] == name), score, views)
+            for name, score, views in recommend_modules(user_preferences, all_modules, over_18)
+        ]
     ]
 
-    special_modules_lower = {k.lower(): v for k, v in special_modules.items()}
-    recommended_niche_modules = [
-        special_modules_lower[interest.lower()]
-        for interest in niche_interests
-        if interest.lower() in special_modules_lower
-    ]
+    # Match niche interests to special modules
+    recommended_niche_modules = []
+    for interest in niche_interests:
+        interest_lower = interest.lower()
+        matched_category = next((category for category in special_modules if category.lower() == interest_lower), None)
+        if matched_category:
+            module_info = special_modules[matched_category]
+            recommended_niche_modules.append({
+                "name": module_info["title"],
+                "link": module_info["link"],
+                "description": module_info["description"]
+            })
 
     return templates.TemplateResponse(
         "thankyou.html",
         {
             "request": request,
-            "general_recommendations": top_6_modules or [{"name": "No recommendations", "link": "", "description": "No modules available"}],
+            "name": "User",  # Static, as old code used
+            "email": "N/A",  # Static, as old code used
+            "preferences": dict(zip(categories, user_preferences)),
+            "niche_interests": niche_interests,
+            "general_recommendations": top_6_modules,
             "niche_recommendations": recommended_niche_modules
         }
     )
