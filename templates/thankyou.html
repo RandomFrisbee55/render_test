@@ -11,44 +11,52 @@
             margin: 0;
             padding: 0;
             background-color: #ecf0f1; /* Light teal background */
-            color: #4A6B65; /* Dark teal text */
+            color: #4A6B65; /* Dark teal text for body */
             line-height: 1.6;
         }
         .container {
-            max-width: 1100px; /* Slightly narrower for better centering */
-            margin: 40px auto;
-            padding: 40px 20px;
+            max-width: 1100px;
+            margin: 20px auto; /* Reduced margin for less white space */
+            padding: 20px;
             background-color: #FFFFFF;
             border-radius: 10px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
         header {
-            text-align: center;
-            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+        .logo-container {
+            flex: 0 0 200px; /* Fixed width for logo */
         }
         header img {
-            max-width: 250px;
+            max-width: 200px; /* Slightly smaller logo */
             height: auto;
-            margin-bottom: 20px;
+        }
+        .header-text {
+            flex: 1;
+            padding-left: 20px;
         }
         h1 {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            color: #000000;
-            font-size: 2.5em; /* Slightly reduced for balance */
-            margin: 0 0 10px 0;
+            color: #000000; /* Black for headers */
+            font-size: 2em;
+            margin: 0 0 5px 0;
             line-height: 1.2;
         }
         h2 {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            color: #000000;
-            font-size: 1.75em;
-            margin-top: 40px;
-            margin-bottom: 20px;
+            color: #000000; /* Black for headers */
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
             position: relative;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
         }
         h2::after {
             content: '';
@@ -61,9 +69,19 @@
         }
         h3 {
             font-family: 'Open Sans', sans-serif;
-            font-size: 1.1em;
-            color: #7A9A95; /* Lighter teal for subtitle */
-            margin: 0 0 30px 0;
+            font-size: 1em;
+            color: #4A6B65; /* Match body text color */
+            margin: 0 0 20px 0;
+        }
+        .algorithm-info {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.95em;
+            color: #4A6B65; /* Match body text color */
+            background-color: #F9FBFA;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
         }
         ul, ol {
             padding-left: 0;
@@ -74,18 +92,17 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
-            gap: 20px; /* Consistent spacing between cards */
+            gap: 15px;
             margin: 0;
             padding: 0;
         }
         li.module-card {
-            flex: 0 0 48%;
-            aspect-ratio: 1 / 1;
-            margin-bottom: 0; /* Removed to use gap instead */
-            padding: 20px;
-            background: linear-gradient(145deg, #FFFFFF, #F9FBFA); /* Subtle gradient for depth */
-            border: 1px solid #E0E8E6; /* Light border */
-            border-radius: 10px;
+            flex: 0 0 31%; /* Reduced to fit 3 cards per row, smaller boxes */
+            aspect-ratio: 1 / 0.8; /* Adjusted for smaller height */
+            padding: 15px; /* Reduced padding */
+            background: linear-gradient(145deg, #FFFFFF, #F9FBFA);
+            border: 1px solid #E0E8E6;
+            border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
@@ -100,21 +117,21 @@
         .module-title {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            font-size: 1.25em;
+            font-size: 1em; /* Smaller font for smaller cards */
             color: #FFFFFF;
-            background-color: #124A59; /* Darker teal */
-            padding: 12px 20px;
+            background-color: #124A59;
+            padding: 8px 12px; /* Reduced padding */
             border-radius: 5px;
             text-decoration: none;
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             transition: background-color 0.3s ease;
             display: block;
             line-height: 1.2;
         }
         .module-title:hover,
         .module-title:focus {
-            background-color: #2A5C54; /* Slightly lighter on hover */
+            background-color: #2A5C54;
             outline: none;
             text-decoration: none;
         }
@@ -125,33 +142,45 @@
         }
         .module-description {
             font-family: 'Open Sans', Arial, sans-serif;
-            font-size: 0.95em;
-            color: #124A59;
+            font-size: 0.85em; /* Smaller font for smaller cards */
+            color: #4A6B65; /* Match body text color */
             margin: 0;
-            line-height: 1.5;
+            line-height: 1.4;
             flex-grow: 1;
             display: -webkit-box;
-            -webkit-line-clamp: 6; /* Limit to 6 lines */
+            -webkit-line-clamp: 4; /* Reduced lines for smaller cards */
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .section {
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
         @media (max-width: 768px) {
             .container {
-                margin: 20px auto;
-                padding: 20px 10px;
+                margin: 10px auto;
+                padding: 10px;
+            }
+            header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .logo-container {
+                flex: 0 0 auto;
+                margin-bottom: 10px;
+            }
+            .header-text {
+                padding-left: 0;
             }
             li.module-card {
-                flex: 0 0 100%; /* Single column on mobile */
+                flex: 0 0 100%;
             }
             h1 {
-                font-size: 2em;
+                font-size: 1.5em;
             }
             h2 {
-                font-size: 1.5em;
+                font-size: 1.25em;
             }
         }
     </style>
@@ -159,10 +188,18 @@
 <body>
     <div class="container">
         <header>
-            <img src="/static/body_brave_logo.png" alt="Body Brave Logo">
-            <h1>Thank You for Your Submission!</h1>
-            <h3>Here are the top 6 recommended recovery support sessions based on your recovery interests and goals.</h3>
+            <div class="logo-container">
+                <img src="/static/body_brave_logo.png" alt="Body Brave Logo">
+            </div>
+            <div class="header-text">
+                <h1>Thank You for Your Submission!</h1>
+                <h3>Here are the top 6 recommended recovery support sessions based on your recovery interests and goals.</h3>
+            </div>
         </header>
+
+        <div class="algorithm-info">
+            <p>We analyzed your preferences using a combination of similarity scoring and popularity metrics to recommend sessions that best match your recovery goals.</p>
+        </div>
 
         <div class="section">
             <h2>General Recommendations</h2>
