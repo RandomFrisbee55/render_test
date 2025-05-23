@@ -144,6 +144,10 @@
             background: #F5F5F5;
             cursor: default;
         }
+        .module-card.disabled:hover {
+            transform: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
         .module-card.disabled .module-title {
             background-color: #999;
             cursor: default;
@@ -208,7 +212,7 @@
             </div>
             <div class="header-text">
                 <h1>Thank You for Your Submission!</h1>
-                <h3>Based on your current recovery goals, here are some Recovery Support Sessions that are most relevant for you!</h3>
+                <h3>Based on your answers, here are some recovery support sessions that are most relevant for you! </h3>
                 <p class="header-link">You can also return to our full list <a href="https://www.bodybrave.ca/past-support-sessions" target="_blank" rel="noopener noreferrer">here</a>.</p>
             </div>
         </header>
@@ -220,13 +224,16 @@
                 <li class="module-card{% if not link %} disabled{% endif %}">
                     {% if link %}
                     <a href="{{ link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ name }} module in a new tab">
-                    {% endif %}
                         <div class="module-title">{{ name }}</div>
                         {% if description %}
                         <div class="module-description">{{ description }}</div>
                         {% endif %}
-                    {% if link %}
                     </a>
+                    {% else %}
+                        <div class="module-title">{{ name }}</div>
+                        {% if description %}
+                        <div class="module-description">{{ description }}</div>
+                        {% endif %}
                     {% endif %}
                 </li>
                 {% endfor %}
@@ -238,11 +245,19 @@
             <h2>Special Interest Sessions</h2>
             <ol class="module-list">
                 {% for module in niche_recommendations %}
-                <li class="module-card">
+                <li class="module-card{% if not module.link %} disabled{% endif %}">
                     {% if module.link %}
-                    <a href="{{ module.link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ module.name }} module in a new tab" class="module-title">{{ module.name }}</a>
+                    <a href="{{ module.link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ module.name }} module in a new tab">
+                        <div class="module-title">{{ module.name }}</div>
+                        {% if module.description %}
+                        <div class="module-description">{{ module.description }}</div>
+                        {% endif %}
+                    </a>
                     {% else %}
-                    <div class="module-title" style="background-color: #999; cursor: default;">{{ module.name }}</div>
+                        <div class="module-title">{{ module.name }}</div>
+                        {% if module.description %}
+                        <div class="module-description">{{ module.description }}</div>
+                        {% endif %}
                     {% endif %}
                 </li>
                 {% endfor %}
