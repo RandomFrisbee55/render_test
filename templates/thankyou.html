@@ -74,6 +74,21 @@
             color: #000000;
             margin: 0 0 12px 0;
         }
+        .header-link {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1em;
+            color: #000000;
+            margin: 5px 0 0 0;
+        }
+        .header-link a {
+            color: #124A59;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .header-link a:hover {
+            color: #2A5C54;
+            text-decoration: underline;
+        }
         ul, ol {
             padding-left: 0;
             margin: 0;
@@ -140,8 +155,8 @@
             margin: 0;
             line-height: 1.5;
             flex-grow: 1;
-            overflow-y: auto; /* Enable vertical scrolling */
-            padding-right: 5px; /* Space for scrollbar */
+            overflow-y: auto;
+            padding-right: 5px;
         }
         .module-description::-webkit-scrollbar {
             width: 6px;
@@ -194,6 +209,7 @@
             <div class="header-text">
                 <h1>Thank You for Your Submission!</h1>
                 <h3>Based on your current recovery goals, here are some Recovery Support Sessions that are most relevant for you!</h3>
+                <p class="header-link">You can also return to our full list <a href="https://www.bodybrave.ca/past-support-sessions" target="_blank" rel="noopener noreferrer">here</a>.</p>
             </div>
         </header>
 
