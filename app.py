@@ -46,15 +46,7 @@ def load_special_modules(csv_file_path):
 
 # Helper function to filter modules based on month and age
 def filter_modules(all_modules, age_over_18):
-    current_month = datetime.datetime.now().month
     filtered_modules = all_modules[:]
-    
-    if current_month not in [11, 12]:
-        holiday_modules = ["navigating the holidays in recovery", "thriving through the holidays"]
-        filtered_modules = [
-            module for module in filtered_modules 
-            if module["name"].lower() not in holiday_modules
-        ]
     
     if age_over_18:
         filtered_modules = [
