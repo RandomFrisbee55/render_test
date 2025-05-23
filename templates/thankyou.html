@@ -238,16 +238,14 @@
             <h2>Special Interest Sessions</h2>
             <ol class="module-list">
                 {% for module in niche_recommendations %}
-                <li class="module-card{% if not link %} disabled{% endif %}">
+                <li class="module-card">
                     {% if module.link %}
-                    <a href="{{ module.link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ module.name }} module in a new tab">
+                    <a href="{{ module.link }}" target="_blank" rel="noopener noreferrer" aria-label="View {{ module.name }} module in a new tab" class="module-title">{{ module.name }}</a>
+                    {% else %}
+                    <div class="module-title" style="background-color: #999; cursor: default;">{{ module.name }}</div>
                     {% endif %}
-                        <div class="module-title">{{ module.name }}</div>
-                        {% if module.description %}
-                        <div class="module-description">{{ description }}</div>
-                        {% endif %}
-                    {% if module.link %}
-                    </a>
+                    {% if module.description %}
+                    <div class="module-description">{{ module.description }}</div>
                     {% endif %}
                 </li>
                 {% endfor %}
