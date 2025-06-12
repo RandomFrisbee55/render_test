@@ -244,7 +244,7 @@ async def submit_form(request: Request):
         )
 
     over_18_str = form_data.get("under_18", "NO")
-    over_18 = over_18_str.upper() == "YES"
+    over_18 = over_18_str.upper() == "NO"
 
     niche_interests = []
     for key, value in form_data.items():
